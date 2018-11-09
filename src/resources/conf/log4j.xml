@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration  xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<!-- 控制台输出 -->
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] %5p [%30.30C:%4.4L] - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+		</filter>
+	</appender>
+
+	<!-- 系统默认日志输出文件 -->
+	<appender name="defaultFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/futureOne.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] %5p [%30.30C:%4.4L] - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+		</filter>
+	</appender>
+
+
+	<!-- ======================================================================================================= -->
+	<!-- ================================hotel-workflow组件日志appender 配置开始==================================== -->
+	<!-- ======================================================================================================= -->
+	<!--commonScheduler info appender -->
+	<appender name="commonSchedulerInfoAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/future_one/futureOne_info.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] %5p [%30.30C:%4.4L] - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+		</filter>
+	</appender>
+
+	<!--commonScheduler Error appender -->
+	<appender name="commonSchedulerErrorAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="${catalina.home}/logs/future_one/futureOne_info.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d] %5p [%30.30C:%4.4L] - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+		</filter>
+	</appender>
+
+	<!-- ===================================================================================================== -->
+	<!-- ===================================================================================================== -->
+
+	<logger name="commonSchedulerLogger" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="commonSchedulerInfoAppender" />
+		<appender-ref ref="commonSchedulerErrorAppender" />
+	</logger>
+	
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="defaultFileAppender" />
+	</root>
+
+</log4j:configuration>
