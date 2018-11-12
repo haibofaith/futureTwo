@@ -1,5 +1,6 @@
 package com.haibo.futwo.web.ctrl;
 
+import com.haibo.futwo.web.model.BaseResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +13,8 @@ public class HelloCtrl {
     @RequestMapping(value = "/helloDog")
     @ResponseBody
     public String helloKitty(HttpServletRequest request) {
-        return "kittyDog";
+        String callback = request.getParameter("callbackparm");
+        String resp = callback + "([ { name:\"John\"}])";
+        return resp;
     }
 }
