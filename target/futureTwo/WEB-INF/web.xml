@@ -9,15 +9,15 @@
     <param-value>classpath:/conf/applicationContext.xml</param-value>
   </context-param>
   <!--跨域请求-->
-  <filter>
-    <filter-name>CrossFilter</filter-name>
-    <filter-class>com.haibo.futwo.web.filter.CrossFilter</filter-class>
-  </filter>
+  <!--<filter>-->
+    <!--<filter-name>CrossFilter</filter-name>-->
+    <!--<filter-class>com.haibo.futwo.web.filter.CrossFilter</filter-class>-->
+  <!--</filter>-->
 
-  <filter-mapping>
-    <filter-name>CrossFilter</filter-name>
-    <url-pattern>/a/*</url-pattern>
-  </filter-mapping>
+  <!--<filter-mapping>-->
+    <!--<filter-name>CrossFilter</filter-name>-->
+    <!--<url-pattern>/a/*</url-pattern>-->
+  <!--</filter-mapping>-->
 
   <!-- 配置Spring2:配置Spring监听2 -->
   <listener>
