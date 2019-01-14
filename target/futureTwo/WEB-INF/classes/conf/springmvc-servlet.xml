@@ -8,14 +8,57 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
     <!-- 配置handlerMapping -->
     <bean class="org.springframework.web.servlet.mvc.support.ControllerBeanNameHandlerMapping"></bean>
-    <!-- 配置视图解析器 -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!-- 前缀 :说明如果直接放在web-inf下，不需要加前缀-->
-        <property name="prefix" value="WEB-INF/view/"></property>
-        <!-- 后缀 ： -->
-        <property name="suffix" value=".jsp"></property>
+
+    <!-- freemarker的配置begin -->
+    <bean id="freemarkerConfigurer"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/views/" />
+
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="tag_syntax">auto_detect</prop>
+                <!--模版更新时间-->
+                <prop key="template_update_delay">10</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="boolean_format">true,false</prop>
+                <!--时间日期格式-->
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">#.##</prop>
+                <!--去掉多余空格-->
+                <prop key="whitespace_stripping">true</prop>
+                <!--自动引入模版的位置-->
+                <prop key="auto_import">include/spring.ftl as spring</prop>
+            </props>
+        </property>
     </bean>
 
+    <!--亦可采用此种方式-->
+    <!--<bean id="freemarkerConfigurer2"-->
+    <!--class="org.springframework.beans.factory.config.PropertiesFactoryBean">-->
+    <!--<property name="location" value="classpath:conf/freemarker.properties"/>-->
+    <!--</bean>-->
+
+    <!-- 定义freemarker的视图解析器 -->
+    <bean id="freeMarkerViewResolver"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <!--表现层所在目录-->
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <!--view页面类型-->
+        <property name="suffix" value=".html" />
+        <property name="cache" value="true"/>
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSessionAttributes" value="true" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="requestContextAttribute" value="rc" />
+    </bean>
+    <!--freemarker的配置end-->
+
+    <mvc:resources mapping="/js/**" location="/js/" />
 
     <!-- 加入注解驱动 -->
     <mvc:annotation-driven></mvc:annotation-driven>
