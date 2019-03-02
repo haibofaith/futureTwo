@@ -1,6 +1,9 @@
 package com.haibo.futwo.web.ctrl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.haibo.futwo.web.client.GetDatabaseInfo;
+import com.haibo.futwo.web.client.MobileCodeWS;
+import com.haibo.futwo.web.client.ObjectFactory;
 import com.haibo.futwo.web.mappers.ITestUserMapper;
 import com.haibo.futwo.web.model.BaseResponse;
 import com.haibo.futwo.web.model.Person;
@@ -31,6 +34,8 @@ public class HelloCtrl {
     public String helloKitty(HttpServletRequest request) {
         String callback = request.getParameter("callbackparm");
         String resp = callback + "([ { name:\"dog\"}])";
+        System.out.println("--------"+System.getProperties().getProperty("user.dir"));
+        System.out.println("--------"+System.getProperties().getProperty("user.home"));
         return resp;
     }
 
@@ -148,6 +153,22 @@ public class HelloCtrl {
         return mv;
     }
 
+    @RequestMapping(value = "/webservice")
+    @ResponseBody
+    public String webservice(HttpServletRequest request) {
+        String phone = request.getParameter("phone");
+        MobileCodeWS mobileCodeWS = new MobileCodeWS();
+        String resp = mobileCodeWS.getMobileCodeWSSoap().getMobileCodeInfo(phone,"");
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setBody(resp);
+        return baseResponse.toString();
+    }
 
+    @RequestMapping(value = "/helloHtml")
+    public ModelAndView helloHtml(HttpServletRequest request){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("freemarker/demo1");
+        return mv;
+    }
 
 }

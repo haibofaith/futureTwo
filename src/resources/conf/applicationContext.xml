@@ -18,10 +18,22 @@
         <property name="locations">
             <list>
                 <value>classpath:conf/jdbc.properties</value>
+                <value>classpath:conf/exam.properties</value>
+                <value>classpath:conf/file.properties</value>
             </list>
         </property>
     </bean>
 
+    <bean id="fileProperties" class="com.haibo.futwo.web.model.FileProperties">
+        <property name="uploadpath" value="${online.upload.path}"/>
+        <property name="localpath" value="${local.upload.path}"/>
+    </bean>
+
+    <bean id="examSource" class="com.haibo.futwo.web.model.ExamProperties">
+        <property name="username" value="${exam.person.username}"/>
+        <property name="password" value="${exam.person.password}"/>
+        <property name="json" value="${exam.sort.json}"/>
+    </bean>
 
     <!-- 第三个数据源：配置eb数据源 -->
     <bean id="localSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -134,4 +146,5 @@
         <property name="basePackage" value="com.haibo.futwo.web.mappers" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
+
 </beans>

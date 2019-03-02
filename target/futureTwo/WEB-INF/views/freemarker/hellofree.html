@@ -10,11 +10,12 @@
 </head>
 <body>
 <div id="main" style="width: 600px;height:400px;"></div>
+<div id="main2" style="width: 600px;height:400px;"></div>
+<div id="main3" style="width: 600px;height:400px;"></div>
+<div id="main4" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
-//    var name =  eval('${mylist2}');
     var json = JSON.parse('${mylist2}');
     var list1 = json.body;
-//    var namelist = name.split(",");
     // 基于准备好的dom，初始化echarts实例
     var myChart = echarts.init(document.getElementById('main'));
     // 指定图表的配置项和数据
@@ -38,6 +39,73 @@
     };
 
     // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+<script>
+    // 绘制图表。
+    echarts.init(document.getElementById('main2')).setOption({
+        series: {
+            type: 'pie',
+            data: [
+                {name: 'A', value: 1212},
+                {name: 'B', value: 2323},
+                {name: 'C', value: 1919}
+            ]
+        }
+    });
+</script>
+<script>
+    // 基于准备好的dom，初始化 echarts 实例并绘制图表。
+    echarts.init(document.getElementById('main3')).setOption({
+        title: {text: 'Line Chart'},
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataView: {},
+                saveAsImage: {
+                    pixelRatio: 2
+                },
+                restore: {}
+            }
+        },
+        xAxis: {},
+        yAxis: {},
+        series: [{
+            type: 'line',
+            smooth: true,
+            data: [[12, 5], [24, 20], [36, 36], [48, 10], [60, 10], [72, 20]]
+        }]
+    });
+</script>
+<script>
+    var myChart = echarts.init(document.getElementById('main4'),'dark');
+    var option = {
+        series : [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: '55%',
+                data:[
+                    {value:235, name:'视频广告'},
+                    {value:274, name:'联盟广告'},
+                    {value:310, name:'邮件营销'},
+                    {value:335, name:'直接访问'},
+                    {value:400, name:'搜索引擎'}
+                ],
+                roseType: 'angle',
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    emphasis: {
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
     myChart.setOption(option);
 </script>
 </body>
