@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haibo.futwo.web.mappers.UserMapper">
+	<resultMap id="BaseResultMap"
+		type="com.haibo.futwo.web.model.WeixinUser">
+		<id column="id" property="id"/>
+		<result column="username" property="userName"/>
+		<result column="phone" property="phone"/>
+		<result column="password" property="passWord"/>
+		<result column="status" property="status"/>
+		<result column="_timestamp" property="timestamp"/>
+	</resultMap>
+	<!--private String uuid;
+    private String session_key;
+    private String openid;
+    private String nickName;
+    private String avatarUrl;-->
+	<resultMap id="WeixinSessionMap" type="com.haibo.futwo.web.model.WeixinSession">
+		<id column="id" property="id"/>
+		<result column="uuid" property="uuid"/>
+		<result column="session_key" property="session_key"/>
+		<result column="openid" property="openid"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="avatar_url" property="avatarUrl"/>
+		<result column="_timestamp" property="timestamp"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, username,phone, password,status, _timestamp
+	</sql>
+
+	<sql id="session_column">
+		uuid,session_key,openid,nick_name,avatar_url
+	</sql>
+
+	<sql id="all_session_column">
+		id,<include refid="session_column"/>,_timestamp
+	</sql>
+
+	<select id="login" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+		weixin_user
+		<where>
+			<if test="username != null">
+				and username=#{username}
+			</if>
+			<if test="password != null">
+				and password = #{password}
+			</if>
+			and status=1
+		</where>
+
+	</select>
+
+	<insert id="onLogin" parameterType="com.haibo.futwo.web.model.WeixinSession">
+		INSERT INTO weixin_session(<include refid="session_column"/>) VALUES (#{uuid}, #{session_key},#{openid},#{nickName},#{avatarUrl})
+		ON DUPLICATE KEY UPDATE uuid = #{uuid},session_key=#{session_key},nick_name=#{nickName},avatar_url=#{avatarUrl}
+	</insert>
+
+	<select id="getOpenIdByUuid"  resultType="String">
+		SELECT
+		openid
+		FROM
+		weixin_session
+		WHERE
+			uuid=#{uuid}
+	</select>
+
+	<select id="getFriendSessionByNickName" resultMap="WeixinSessionMap">
+		SELECT
+		<include refid="all_session_column"/>
+		FROM
+		weixin_session
+		WHERE
+			nick_name=#{nickName}
+	</select>
+
+	<select id="searchUsersByNickName" resultMap="WeixinSessionMap">
+		SELECT
+		<include refid="all_session_column"/>
+		FROM
+		weixin_session
+		WHERE
+			nick_name like concat('%',#{nickName},'%')
+	</select>
+
+	<select id="getUserSessionByUuid" resultMap="WeixinSessionMap">
+		SELECT
+		<include refid="all_session_column"/>
+		FROM
+		weixin_session
+		WHERE
+		uuid=#{uuid}
+	</select>
+</mapper>

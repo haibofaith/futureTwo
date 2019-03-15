@@ -8,8 +8,11 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!--<context:component-scan base-package="model"></context:component-scan>-->
-
+    <import resource="classpath:conf/spring-jedis-context.xml"/>
     <context:component-scan base-package="com.haibo.futwo.web.service.impl"></context:component-scan>
+    <context:component-scan base-package="com.haibo.futwo.web.utils"></context:component-scan>
+    <context:component-scan base-package="com.haibo.futwo.web.config"></context:component-scan>
+
     <!-- 定义受环境影响易变的变量 -->
     <bean id="propetyPlaceholder"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -27,6 +30,7 @@
     <bean id="fileProperties" class="com.haibo.futwo.web.model.FileProperties">
         <property name="uploadpath" value="${online.upload.path}"/>
         <property name="localpath" value="${local.upload.path}"/>
+        <property name="bookpath" value="${online.upload.book.path}"/>
     </bean>
 
     <bean id="examSource" class="com.haibo.futwo.web.model.ExamProperties">
@@ -38,10 +42,10 @@
     <!-- 第三个数据源：配置eb数据源 -->
     <bean id="localSource" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
-        <property name="driverClassName" value="${jdbc.three.driverClassName}" />
-        <property name="url" value="${jdbc.three.url}" />
-        <property name="username" value="${jdbc.three.username}" />
-        <property name="password" value="${jdbc.three.password}" />
+        <property name="driverClassName" value="${jdbc.one.driverClassName}" />
+        <property name="url" value="${jdbc.one.url}" />
+        <property name="username" value="${jdbc.one.username}" />
+        <property name="password" value="${jdbc.one.password}" />
         <!-- 池启动时创建的连接数量 -->
         <property name="initialSize" value="${dbcp.initialSize}" />
         <!-- 池里不会被释放的最多空闲连接数量。设置为0时表示无限制 -->

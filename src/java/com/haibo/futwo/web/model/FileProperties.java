@@ -10,6 +10,15 @@ import java.io.Serializable;
 public class FileProperties implements Serializable{
     private String uploadpath;
     private String localpath;
+    private String bookpath;
+
+    public String getBookpath() {
+        return bookpath;
+    }
+
+    public void setBookpath(String bookpath) {
+        this.bookpath = bookpath;
+    }
 
     public String getLocalpath() {
         return localpath;

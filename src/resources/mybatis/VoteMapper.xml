@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haibo.futwo.web.mappers.VoteMapper">
+	<!--private String openId;-->
+	<!--private String nickName;-->
+	<!--private String voteName;-->
+	<resultMap id="vote_result_map"
+			   type="com.haibo.futwo.web.model.VoteInfo">
+		<id column="id" property="id"/>
+		<result column="open_id" property="openId"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="vote_name" property="voteName"/>
+		<result column="_timestamp" property="timestamp"/>
+	</resultMap>
+	<sql id="base_colum">
+		open_id,nick_name,vote_name
+	</sql>
+	<sql id="all_colum">
+		id,<include refid="base_colum"/>,_timestamp
+	</sql>
+	<insert id="newVote" parameterType="com.haibo.futwo.web.model.VoteInfo">
+		INSERT INTO weixin_vote_list(<include refid="base_colum"/>) VALUES (#{openId},#{nickName},#{voteName})
+	</insert>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haibo.futwo.web.mappers.BookMapper">
+	<resultMap id="BaseResultMap"
+			   type="com.haibo.futwo.web.model.WeixinBook">
+		<id column="id" property="id"/>
+		<result column="book_title" property="bookTitle"/>
+		<result column="book_id" property="bookId"/>
+		<result column="book_path" property="bookPath"/>
+		<result column="_timestamp" property="timestamp"/>
+	</resultMap>
+	<insert id="insertBook" parameterType="com.haibo.futwo.web.model.WeixinBook">
+		insert into weixin_book(<include refid="base_colum"/>) values (#{bookTitle},#{bookId},#{bookPath})
+		ON DUPLICATE KEY UPDATE book_id = #{bookId},book_path = #{bookPath};
+	</insert>
+	<sql id="all_colum">
+		id,<include refid="base_colum"/>,_timestamp
+	</sql>
+	<sql id="base_colum">
+		book_title,book_id,book_path
+	</sql>
+	<sql id="pager">
+		LIMIT #{start}, #{limit}
+	</sql>
+	<select id="selectBookByPage" resultMap="BaseResultMap">
+		SELECT <include refid="all_colum"/> FROM weixin_book ORDER BY book_id <include refid="pager"/>
+	</select>
+</mapper>

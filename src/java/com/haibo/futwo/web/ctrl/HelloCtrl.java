@@ -4,11 +4,18 @@ import com.alibaba.fastjson.JSONArray;
 import com.haibo.futwo.web.client.GetDatabaseInfo;
 import com.haibo.futwo.web.client.MobileCodeWS;
 import com.haibo.futwo.web.client.ObjectFactory;
+import com.haibo.futwo.web.constant.WeixinConstant;
 import com.haibo.futwo.web.mappers.ITestUserMapper;
 import com.haibo.futwo.web.model.BaseResponse;
 import com.haibo.futwo.web.model.Person;
 import com.haibo.futwo.web.model.User;
+import com.haibo.futwo.web.model.WeixinSession;
 import com.haibo.futwo.web.service.TestService;
+import com.haibo.futwo.web.utils.JedisUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,10 +32,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+@Api(value = "测试API", description = "测试API")
 @Controller
 @RequestMapping(value = "/a")
 public class HelloCtrl {
+    Logger logger = LoggerFactory.getLogger(HelloCtrl.class);
     @RequestMapping(value = "/helloDog")
     @ResponseBody
     public String helloKitty(HttpServletRequest request) {
@@ -37,6 +45,31 @@ public class HelloCtrl {
         System.out.println("--------"+System.getProperties().getProperty("user.dir"));
         System.out.println("--------"+System.getProperties().getProperty("user.home"));
         return resp;
+    }
+
+    @Resource
+    private JedisUtil jedisUtil;
+    @RequestMapping(value = "/setRedis")
+    @ResponseBody
+    public String setRedis(HttpServletRequest request){
+        String key = request.getParameter("key");
+        String value = request.getParameter("value");
+        logger.debug("key"+key+" value"+value);
+        BaseResponse response = new BaseResponse();
+        response.setBody("key:"+key+" value:"+value);
+        jedisUtil.sets(key,value);
+        return response.toString();
+    }
+
+    @RequestMapping(value = "/getRedisValueByKey")
+    @ResponseBody
+    public String getRedisValueByKey(HttpServletRequest request){
+        String key = request.getParameter("key");
+        BaseResponse response = new BaseResponse();
+        String value = jedisUtil.gets(key);
+        response.setBody("key:"+key+" value:"+value);
+//        jedisUtil.sets(key,value);
+        return response.toString();
     }
 
     @RequestMapping(value = "/completeReq")
@@ -65,7 +98,8 @@ public class HelloCtrl {
         //1、cookie中获得name
         String name = getSessionId(request, domain);
         BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setBody(name.toString());
+        WeixinSession weixinSession = (WeixinSession) request.getAttribute(WeixinConstant.weixinUser.toString());
+        baseResponse.setBody(name.toString()+weixinSession.getNickName());
         return baseResponse;
     }
 

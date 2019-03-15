@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haibo.futwo.web.mappers.FileMapper">
+	<resultMap id="All_Column_List"
+		type="com.haibo.futwo.web.model.WeixinImg">
+		<id column="id" property="id"/>
+		<result column="img_name" property="imgName"/>
+		<result column="img_path" property="imgPath"/>
+		<result column="img_file" property="imgFile"/>
+		<result column="img_url" property="imgUrl"/>
+		<result column="img_date" property="imgDate"/>
+		<result column="_timestamp" property="timestamp"/>
+		<result column="open_id" property="open_id"/>
+		<result column="small_img_name" property="smallImgName"/>
+		<result column="small_img_path" property="smallImgPath"/>
+		<result column="small_img_file" property="smallImgFile"/>
+		<result column="small_img_url" property="smallImgUrl"/>
+	</resultMap>
+
+	<sql id="All_Column_List">
+		id, img_name,img_path, img_file,img_url,img_date,open_id, _timestamp,small_img_name,small_img_path,small_img_file,small_img_url
+	</sql>
+	<sql id="Base_Column_List">
+		img_name,img_path, img_file,img_url,img_date,open_id,small_img_name,small_img_path,small_img_file,small_img_url
+	</sql>
+
+	<insert id="uploadImg" parameterType="com.haibo.futwo.web.model.WeixinImg">
+		INSERT INTO weixin_img(<include refid="Base_Column_List"/>) VALUES (#{imgName}, #{imgPath},#{imgFile}, #{imgUrl},
+		#{imgDate},#{open_id},#{smallImgName},#{smallImgPath},#{smallImgFile},#{smallImgUrl})
+	</insert>
+
+	<select id="selectImgParentDistinct" resultType="String">
+		SELECT DISTINCT small_img_file FROM weixin_img
+		WHERE
+			open_id=#{open_id}
+	</select>
+
+	<select id="selectImgByImgFile" resultMap="All_Column_List">
+		SELECT <include refid="All_Column_List"/> FROM weixin_img
+		<where>
+			<if test="imgFile!=null">
+			AND small_img_file = #{imgFile}
+			</if>
+			<if test="open_id!=null">
+			AND open_id=#{open_id}
+			</if>
+		</where>
+		ORDER BY _timestamp DESC
+	</select>
+</mapper>

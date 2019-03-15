@@ -9,4 +9,6 @@ public interface TestService {
     @DataSource(DataSourceConstant.DATA_SOURCE_ORACLE)
     Integer getSumSalary();
 
+
+
 }

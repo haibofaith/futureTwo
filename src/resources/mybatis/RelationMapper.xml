@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haibo.futwo.web.mappers.RelationMapper">
+	<sql id="Base_Column_List">
+		openid,nick_name, friend_openid,friend_nick_name
+	</sql>
+	<sql id="All_Column_List">
+		id,<include refid="Base_Column_List"/>,_timestamp
+	</sql>
+	<resultMap id="relation_Result" type="com.haibo.futwo.web.model.WeixinRelation">
+		<id column="id" property="id"/>
+		<result column="openid" property="openid"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="friend_openid" property="friendOpenid"/>
+		<result column="friend_nick_name" property="friendNickName"/>
+		<result column="_timestamp" property="timestamp"/>
+	</resultMap>
+	<!--private String openid;
+    private String nickName;
+    private String friendOpenid;
+    private String friendNickName;-->
+	<insert id="setRelation" parameterType="com.haibo.futwo.web.model.WeixinRelation">
+		INSERT INTO weixin_relation(<include refid="Base_Column_List"/>) VALUES (#{openid}, #{nickName},#{friendOpenid}, #{friendNickName})
+		ON DUPLICATE KEY UPDATE nick_name=#{nickName},friend_nick_name = #{friendNickName}
+	</insert>
+
+	<select id="getFriendByOpenid" resultType="String">
+		SELECT friend_openid FROM weixin_relation WHERE openid = #{openid}
+	</select>
+	<!--通过朋友设置的分享规则查找-->
+	<select id="getRelationInfoByOpenid" resultMap="relation_Result">
+		SELECT <include refid="All_Column_List"/> FROM weixin_relation WHERE friend_openid = #{openid}
+	</select>
+</mapper>
